@@ -1,0 +1,69 @@
+﻿
+@{
+    ViewBag.Title = "Asuntos";
+    Layout = "~/Views/Shared/_PrivateLayout.cshtml";
+}
+
+@using elawyerWebApp.Models;
+
+@{
+
+    List<Issue> issueList = (List<Issue>)ViewData["listIssue"];
+    List<Status> statusList = (List<Status>)ViewData["listStatus"];
+    User user = (User)Session["user"];
+        <div class="overflow-auto card rounded-0 ms-4 me-4 mt-4">
+            <div class="card-header rounded-0 main-card-header">
+                <div class="row">
+                    <div class="col">
+                        <h1>ASUNTOS</h1>
+                    </div>
+                    @if (user.NoRole != 3)
+                    {
+                        <div class="col text-end">
+                            <a href="@Url.Action("CardIssue", "Private")" class="btn-crud text-decoration-none" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Añadir Asunto">
+                                <h1 class="d-inline"><i class="bi bi-plus-square"></i></h1>
+                            </a>
+                        </div>
+                    }                     
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="overflow-auto">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Nº ref.</th>
+                                <th>Descripción</th>
+                                <th>Fecha creación</th>
+                                <th>Fecha inicio</th>
+                                <th>Fecha fin</th>
+                                <th>Horas</th>
+                                <th>Tarifa</th>
+                                <th>Nº cliente</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                            @{
+                                foreach (Issue i in issueList)
+                                {
+                                    <tr>
+                                        <td>
+                                            <a href="@Url.Action("CardIssue", "Private" , new { issue=i.No })">@i.NoRef</a>
+                                        </td>
+                                        <td>@i.Description</td>
+                                        <td>@i.CreationDate</td>
+                                        <td>@i.StartDate</td>
+                                        <td>@i.EndDate</td>
+                                        <td>@i.Hours</td>
+                                        <td>@i.Fee</td>
+                                        <td>@i.NoClient</td>
+                                        <td>@statusList.FirstOrDefault(s => s.No == i.NoStatus).Description</td>
+
+                                    </tr>
+                                }
+                            }
+                    </table>
+                </div>
+            </div>
+        </div>
+}

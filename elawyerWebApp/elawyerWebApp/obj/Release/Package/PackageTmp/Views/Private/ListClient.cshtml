@@ -1,0 +1,62 @@
+﻿
+@{
+    ViewBag.Title = "Clientes";
+    Layout = "~/Views/Shared/_PrivateLayout.cshtml";
+}
+
+@using elawyerWebApp.Models;
+
+@{
+    User user = (User)Session["user"];
+
+    using (elawyerdbEntities db = new elawyerdbEntities())
+    {
+        List<Client> clientList = (List<Client>)ViewData["listClient"];
+        <div class="overflow-auto card rounded-0 ms-4 me-4 mt-4">
+            <div class="card-header rounded-0 main-card-header">
+                <div class="row">
+                    <div class="col">
+                        <h1>CLIENTES</h1>
+                    </div>
+                    @if (user.NoRole != 2)
+                    {
+                        <div class="col text-end">
+                            <a href="@Url.Action("CardClient", "Private")" class="btn-crud text-decoration-none" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Añadir Cliente">
+                                <h1 class="d-inline"><i class="bi bi-plus-square"></i></h1>
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="overflow-auto">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Nº</th>
+                                <th>Nombre y Apellidos</th>
+                                <th>NIF</th>
+                                <th>Dirección</th>
+                                <th>Teléfono</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        @{
+                            foreach (Client c in clientList)
+                            {
+                                <tr>
+                                    <td><a href="@Url.Action("CardClient", "Private" , new { client=c.No })">@c.No</a></td>
+                                    <td>@c.Name @c.Surname</td>
+                                    <td>@c.NIF</td>
+                                    <td>@c.Address1 @c.Address2</td>
+                                    <td>@c.Telephone</td>
+                                    <td>@c.Email</td>
+                                </tr>
+                            }
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+}

@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<sitemanifest>
+  <IisApp path="C:\Users\migva\Google Drive\08 DAM\Proyecto Final\elawyerWebApp\elawyerWebApp\obj\Release\Package\PackageTmp" />
+  <setAcl path="C:\Users\migva\Google Drive\08 DAM\Proyecto Final\elawyerWebApp\elawyerWebApp\obj\Release\Package\PackageTmp" setAclResourceType="Directory" />
+  <setAcl path="C:\Users\migva\Google Drive\08 DAM\Proyecto Final\elawyerWebApp\elawyerWebApp\obj\Release\Package\PackageTmp" setAclUser="anonymousAuthenticationUser" setAclResourceType="Directory" />
+</sitemanifest>

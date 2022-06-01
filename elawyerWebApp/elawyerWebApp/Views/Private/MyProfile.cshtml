@@ -1,0 +1,45 @@
+﻿@using elawyerWebApp.Models;
+@{
+    ViewBag.Title = "Mi Perfil";
+    Layout = "~/Views/Shared/_PrivateLayout.cshtml";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-lg-4">
+        <div class="card rounded-0">
+            <h5 class="card-header text-center rounded-0 main-card-header">DATOS</h5>
+            <div class="card-body">
+                @{
+                    User user = (User)Session["user"];
+                    Role role = (Role)Session["role"];
+                }
+                <table>
+                    <tr>
+                        <th class="p-2">Nombre y apellidos:</th>
+                        <td>@user.Name @user.Surname</td>
+                    </tr>
+                    <tr>
+                        <th class="p-2">NIF:</th>
+                        <td>@user.NIF</td>
+                    </tr>
+                    <tr>
+                        <th class="p-2">Teléfono:</th>
+                        <td>@user.Telephone</td>
+                    </tr>
+                    <tr>
+                        <th class="p-2">Email:</th>
+                        <td>@user.Email</td>
+                    </tr>
+                    <tr>
+                        <th class="p-2">Usuario:</th>
+                        <td>@user.Username</td>
+                    </tr>
+                    <tr>
+                        <th class="p-2">Perfil:</th>
+                        <td>@role.Description</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

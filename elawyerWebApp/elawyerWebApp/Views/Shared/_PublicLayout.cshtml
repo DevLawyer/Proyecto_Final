@@ -1,0 +1,105 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.Title</title>
+    <link rel="icon" href="~/Content/images/favicon.ico" />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/Content/css/site.css" asp-append-version="true" />
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+    <header>
+        <nav class="navbar navbar-expand-lg main-bg main-fg fixed-top navbar-dark vw-100">
+            <div class="container-fluid">
+                <a class="navbar-brand main-fg" href="@Url.Action("Index", "Public")">
+                    <img src="~/Content/images/elawyer_logo_smll.png" alt="elawyer logo" width="30" height="30" class="d-inline-block align-text-top">
+                    ELAWYER
+                </a>
+                <span class="navbar-toggler sidenav-btn me-2" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    &#9776;
+                </span>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            @Html.ActionLink("Servicios", "Services", "Public", null, new { @class = "nav-link active main-fg" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Contacto", "Contact", "Public", null, new { @class = "nav-link active main-fg" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("FAQ", "Faq", "Public", null, new { @class = "nav-link active main-fg" })
+                        </li>
+                    </ul>
+                    @if (Session["user"] != null)
+                    {
+                        <a href="@Url.Action("Dashboard", "Private")" class="button"><i class="bi bi-building"></i> Mi Firma</a>
+                        <a href="@Url.Action("LogOut", "Private")" class="button"><i class="bi bi-box-arrow-left"></i> Salir</a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("LogIn", "Public")" class="button"><i class="bi bi-box-arrow-in-right"></i> Entrar</a>
+                    }
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container-fluid pt-5 pb-5">
+
+        @RenderBody()
+
+    </main>
+
+    <footer class="w-100 py-4 flex-shrink-0 main-bg overflow-hidden mt-auto">
+        <div class="container py-4">
+            <div class="row gy-4 gx-5">
+                <div class="col-lg-4 col-md-6">
+                    <h5 class="h1 main-fg">ELAWYER</h5>
+                    <p class="small text-muted">ELAWYER es un proyecto educativo desarrollado para el módulo profesional de Proyecto Final para el C.F.G.S. de D.A.M. de I.E.S. El Majuelo.</p>
+                    <p class="small text-muted mb-0">&copy; Copyrights. Todos los derechos reservados. <a class="text-primary" href="https://elawyer.azurewebsites.net/">elawyer.azurewebsites.net</a></p>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <h5 class="main-fg mb-3">Páginas</h5>
+                    <ul class="list-unstyled text-muted">
+                        <li>@Html.ActionLink("Home", "Index", "Public", null, new { @class = "main-fg text-decoration-none" })</li>
+                        <li>@Html.ActionLink("Servicios", "Services", "Public", null, new { @class = "main-fg text-decoration-none" })</li>
+                        <li>@Html.ActionLink("Contacto", "Contact", "Public", null, new { @class = "main-fg text-decoration-none" })</li>
+                        <li>@Html.ActionLink("FAQ", "Faq", "Public", null, new { @class = "main-fg text-decoration-none" })</li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <h5 class="main-fg mb-3">Desarrollador</h5>
+                    <ul class="list-unstyled text-muted">
+                        <li><a href="https://www.linkedin.com/in/miguel-m-v%C3%A1zquez-mart%C3%ADnez-5b7079112/" class="main-fg text-decoration-none">LinkedIn</a></li>
+                        <li><a href="https://github.com/DevLawyer" class="main-fg text-decoration-none">Github</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <h5 class="main-fg mb-3">Newsletter</h5>
+                    <p class="small text-muted">Recibe a tiempo las novedades, oportunidades y descuentos directos en tu correo electrónico.</p>
+                    <form action="#">
+                        <div class="input-group mb-3">
+                            <input class="form-control" type="text" placeholder="Correo electrónico" aria-label="Recipient's username" aria-describedby="button-addon2">
+                            <button class="btn btn-primary" id="button-addon2" type="button">
+                                <i class="bi bi-send"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="~/Content/js/site.js" asp-append-version="true"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,724 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="elawyerdbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="No" />
+          </Key>
+          <Property Name="No" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nchar" MaxLength="50" />
+          <Property Name="Surname" Type="nchar" MaxLength="50" />
+          <Property Name="NIF" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="Address1" Type="nchar" MaxLength="50" />
+          <Property Name="Address2" Type="nchar" MaxLength="50" />
+          <Property Name="Telephone" Type="nchar" MaxLength="12" />
+          <Property Name="Email" Type="nchar" MaxLength="50" />
+          <Property Name="NoUser" Type="int" />
+        </EntityType>
+        <EntityType Name="InvoiceHeader">
+          <Key>
+            <PropertyRef Name="No" />
+          </Key>
+          <Property Name="No" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CreateDate" Type="date" Nullable="false" />
+          <Property Name="PaymentDate" Type="date" />
+          <Property Name="TotalAmount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="NoUser" Type="int" Nullable="false" />
+          <Property Name="NoIssue" Type="int" Nullable="false" />
+          <Property Name="NoStatus" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="InvoiceLine">
+          <Key>
+            <PropertyRef Name="No" />
+          </Key>
+          <Property Name="No" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Concept" Type="nchar" MaxLength="200" />
+          <Property Name="Amount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="NoInvoiceHeader" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="InvoiceStatus">
+          <Key>
+            <PropertyRef Name="No" />
+          </Key>
+          <Property Name="No" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Description" Type="nchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Issue">
+          <Key>
+            <PropertyRef Name="No" />
+          </Key>
+          <Property Name="No" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NoRef" Type="nchar" MaxLength="15" Nullable="false" />
+          <Property Name="Description" Type="nchar" MaxLength="300" />
+          <Property Name="CreationDate" Type="date" Nullable="false" />
+          <Property Name="StartDate" Type="date" Nullable="false" />
+          <Property Name="EndDate" Type="date" />
+          <Property Name="Hours" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="Fee" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="NoClient" Type="int" Nullable="false" />
+          <Property Name="NoStatus" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="No" />
+          </Key>
+          <Property Name="No" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Description" Type="nchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Status">
+          <Key>
+            <PropertyRef Name="No" />
+          </Key>
+          <Property Name="No" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Description" Type="nchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="No" />
+          </Key>
+          <Property Name="No" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nchar" MaxLength="50" />
+          <Property Name="Surname" Type="nchar" MaxLength="50" />
+          <Property Name="NIF" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="Telephone" Type="nchar" MaxLength="12" />
+          <Property Name="Email" Type="nchar" MaxLength="50" />
+          <Property Name="Username" Type="nchar" MaxLength="30" Nullable="false" />
+          <Property Name="Password" Type="nchar" MaxLength="30" Nullable="false" />
+          <Property Name="NoRole" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="User_Issue">
+          <Key>
+            <PropertyRef Name="No" />
+          </Key>
+          <Property Name="No" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NoUser" Type="int" Nullable="false" />
+          <Property Name="NoIssue" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Client_Issue">
+          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="Issue" Type="Self.Issue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="No" />
+            </Principal>
+            <Dependent Role="Issue">
+              <PropertyRef Name="NoClient" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InvoiceHeader_InvoiceStatus">
+          <End Role="InvoiceStatus" Type="Self.InvoiceStatus" Multiplicity="1" />
+          <End Role="InvoiceHeader" Type="Self.InvoiceHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InvoiceStatus">
+              <PropertyRef Name="No" />
+            </Principal>
+            <Dependent Role="InvoiceHeader">
+              <PropertyRef Name="NoStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InvoiceHeader_Issue">
+          <End Role="Issue" Type="Self.Issue" Multiplicity="1" />
+          <End Role="InvoiceHeader" Type="Self.InvoiceHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Issue">
+              <PropertyRef Name="No" />
+            </Principal>
+            <Dependent Role="InvoiceHeader">
+              <PropertyRef Name="NoIssue" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InvoiceHeader_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="InvoiceHeader" Type="Self.InvoiceHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="No" />
+            </Principal>
+            <Dependent Role="InvoiceHeader">
+              <PropertyRef Name="NoUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Issue_User">
+          <End Role="Issue" Type="Self.Issue" Multiplicity="1" />
+          <End Role="User_Issue" Type="Self.User_Issue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Issue">
+              <PropertyRef Name="No" />
+            </Principal>
+            <Dependent Role="User_Issue">
+              <PropertyRef Name="NoIssue" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Line_Header">
+          <End Role="InvoiceHeader" Type="Self.InvoiceHeader" Multiplicity="1" />
+          <End Role="InvoiceLine" Type="Self.InvoiceLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InvoiceHeader">
+              <PropertyRef Name="No" />
+            </Principal>
+            <Dependent Role="InvoiceLine">
+              <PropertyRef Name="NoInvoiceHeader" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Status_Issue">
+          <End Role="Status" Type="Self.Status" Multiplicity="1" />
+          <End Role="Issue" Type="Self.Issue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="No" />
+            </Principal>
+            <Dependent Role="Issue">
+              <PropertyRef Name="NoStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Client">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Client" Type="Self.Client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="No" />
+            </Principal>
+            <Dependent Role="Client">
+              <PropertyRef Name="NoUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Issue">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="User_Issue" Type="Self.User_Issue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="No" />
+            </Principal>
+            <Dependent Role="User_Issue">
+              <PropertyRef Name="NoUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Role">
+          <End Role="Role" Type="Self.Role" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="No" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="NoRole" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="elawyerdbModelStoreContainer">
+          <EntitySet Name="Client" EntityType="Self.Client" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="InvoiceHeader" EntityType="Self.InvoiceHeader" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="InvoiceLine" EntityType="Self.InvoiceLine" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="InvoiceStatus" EntityType="Self.InvoiceStatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Issue" EntityType="Self.Issue" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Status" EntityType="Self.Status" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User_Issue" EntityType="Self.User_Issue" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Client_Issue" Association="Self.FK_Client_Issue">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="Issue" EntitySet="Issue" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InvoiceHeader_InvoiceStatus" Association="Self.FK_InvoiceHeader_InvoiceStatus">
+            <End Role="InvoiceStatus" EntitySet="InvoiceStatus" />
+            <End Role="InvoiceHeader" EntitySet="InvoiceHeader" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InvoiceHeader_Issue" Association="Self.FK_InvoiceHeader_Issue">
+            <End Role="Issue" EntitySet="Issue" />
+            <End Role="InvoiceHeader" EntitySet="InvoiceHeader" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InvoiceHeader_User" Association="Self.FK_InvoiceHeader_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="InvoiceHeader" EntitySet="InvoiceHeader" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Issue_User" Association="Self.FK_Issue_User">
+            <End Role="Issue" EntitySet="Issue" />
+            <End Role="User_Issue" EntitySet="User_Issue" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Line_Header" Association="Self.FK_Line_Header">
+            <End Role="InvoiceHeader" EntitySet="InvoiceHeader" />
+            <End Role="InvoiceLine" EntitySet="InvoiceLine" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Status_Issue" Association="Self.FK_Status_Issue">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Issue" EntitySet="Issue" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Client" Association="Self.FK_User_Client">
+            <End Role="User" EntitySet="User" />
+            <End Role="Client" EntitySet="Client" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Issue" Association="Self.FK_User_Issue">
+            <End Role="User" EntitySet="User" />
+            <End Role="User_Issue" EntitySet="User_Issue" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Role" Association="Self.FK_User_Role">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="elawyerdbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="No" />
+          </Key>
+          <Property Name="No" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="Surname" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="NIF" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Address1" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="Address2" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="Telephone" Type="String" MaxLength="12" FixedLength="true" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="NoUser" Type="Int32" />
+          <NavigationProperty Name="Issue" Relationship="Self.FK_Client_Issue" FromRole="Client" ToRole="Issue" />
+          <NavigationProperty Name="User" Relationship="Self.FK_User_Client" FromRole="Client" ToRole="User" />
+        </EntityType>
+        <EntityType Name="InvoiceHeader">
+          <Key>
+            <PropertyRef Name="No" />
+          </Key>
+          <Property Name="No" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="PaymentDate" Type="DateTime" Precision="0" />
+          <Property Name="TotalAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="NoUser" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="Self.FK_InvoiceHeader_User" FromRole="InvoiceHeader" ToRole="User" />
+          <NavigationProperty Name="InvoiceLine" Relationship="Self.FK_Line_Header" FromRole="InvoiceHeader" ToRole="InvoiceLine" />
+          <Property Name="NoIssue" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Issue" Relationship="elawyerdbModel.FK_InvoiceHeader_Issue" FromRole="InvoiceHeader" ToRole="Issue" />
+          <Property Name="NoStatus" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="InvoiceStatus" Relationship="elawyerdbModel.FK_InvoiceHeader_InvoiceStatus" FromRole="InvoiceHeader" ToRole="InvoiceStatus" />
+        </EntityType>
+        <EntityType Name="InvoiceLine">
+          <Key>
+            <PropertyRef Name="No" />
+          </Key>
+          <Property Name="No" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Concept" Type="String" MaxLength="200" FixedLength="true" Unicode="true" />
+          <Property Name="Amount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="NoInvoiceHeader" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="InvoiceHeader" Relationship="Self.FK_Line_Header" FromRole="InvoiceLine" ToRole="InvoiceHeader" />
+        </EntityType>
+        <EntityType Name="Issue">
+          <Key>
+            <PropertyRef Name="No" />
+          </Key>
+          <Property Name="No" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NoRef" Type="String" MaxLength="15" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="300" FixedLength="true" Unicode="true" />
+          <Property Name="CreationDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="EndDate" Type="DateTime" Precision="0" />
+          <Property Name="Hours" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="Fee" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="NoClient" Type="Int32" Nullable="false" />
+          <Property Name="NoStatus" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Client" Relationship="Self.FK_Client_Issue" FromRole="Issue" ToRole="Client" />
+          <NavigationProperty Name="User_Issue" Relationship="Self.FK_Issue_User" FromRole="Issue" ToRole="User_Issue" />
+          <NavigationProperty Name="Status" Relationship="Self.FK_Status_Issue" FromRole="Issue" ToRole="Status" />
+          <NavigationProperty Name="InvoiceHeader" Relationship="elawyerdbModel.FK_InvoiceHeader_Issue" FromRole="Issue" ToRole="InvoiceHeader" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="No" />
+          </Key>
+          <Property Name="No" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Description" Type="String" MaxLength="30" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="Self.FK_User_Role" FromRole="Role" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Status">
+          <Key>
+            <PropertyRef Name="No" />
+          </Key>
+          <Property Name="No" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Description" Type="String" MaxLength="30" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Issue" Relationship="Self.FK_Status_Issue" FromRole="Status" ToRole="Issue" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="No" />
+          </Key>
+          <Property Name="No" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="Surname" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="NIF" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Telephone" Type="String" MaxLength="12" FixedLength="true" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="Username" Type="String" MaxLength="30" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="30" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="NoRole" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Client" Relationship="Self.FK_User_Client" FromRole="User" ToRole="Client" />
+          <NavigationProperty Name="InvoiceHeader" Relationship="Self.FK_InvoiceHeader_User" FromRole="User" ToRole="InvoiceHeader" />
+          <NavigationProperty Name="Role" Relationship="Self.FK_User_Role" FromRole="User" ToRole="Role" />
+          <NavigationProperty Name="User_Issue" Relationship="Self.FK_User_Issue" FromRole="User" ToRole="User_Issue" />
+        </EntityType>
+        <EntityType Name="User_Issue">
+          <Key>
+            <PropertyRef Name="No" />
+          </Key>
+          <Property Name="No" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NoUser" Type="Int32" Nullable="false" />
+          <Property Name="NoIssue" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Issue" Relationship="Self.FK_Issue_User" FromRole="User_Issue" ToRole="Issue" />
+          <NavigationProperty Name="User" Relationship="Self.FK_User_Issue" FromRole="User_Issue" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_Client_Issue">
+          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="Issue" Type="Self.Issue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="No" />
+            </Principal>
+            <Dependent Role="Issue">
+              <PropertyRef Name="NoClient" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Client">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Client" Type="Self.Client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="No" />
+            </Principal>
+            <Dependent Role="Client">
+              <PropertyRef Name="NoUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InvoiceHeader_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="InvoiceHeader" Type="Self.InvoiceHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="No" />
+            </Principal>
+            <Dependent Role="InvoiceHeader">
+              <PropertyRef Name="NoUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Line_Header">
+          <End Role="InvoiceHeader" Type="Self.InvoiceHeader" Multiplicity="1" />
+          <End Role="InvoiceLine" Type="Self.InvoiceLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InvoiceHeader">
+              <PropertyRef Name="No" />
+            </Principal>
+            <Dependent Role="InvoiceLine">
+              <PropertyRef Name="NoInvoiceHeader" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Issue_User">
+          <End Role="Issue" Type="Self.Issue" Multiplicity="1" />
+          <End Role="User_Issue" Type="Self.User_Issue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Issue">
+              <PropertyRef Name="No" />
+            </Principal>
+            <Dependent Role="User_Issue">
+              <PropertyRef Name="NoIssue" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Status_Issue">
+          <End Role="Status" Type="Self.Status" Multiplicity="1" />
+          <End Role="Issue" Type="Self.Issue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="No" />
+            </Principal>
+            <Dependent Role="Issue">
+              <PropertyRef Name="NoStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Role">
+          <End Role="Role" Type="Self.Role" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="No" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="NoRole" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Issue">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="User_Issue" Type="Self.User_Issue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="No" />
+            </Principal>
+            <Dependent Role="User_Issue">
+              <PropertyRef Name="NoUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="elawyerdbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Client" EntityType="Self.Client" />
+          <EntitySet Name="InvoiceHeader" EntityType="Self.InvoiceHeader" />
+          <EntitySet Name="InvoiceLine" EntityType="Self.InvoiceLine" />
+          <EntitySet Name="Issue" EntityType="Self.Issue" />
+          <EntitySet Name="Role" EntityType="Self.Role" />
+          <EntitySet Name="Status" EntityType="Self.Status" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="User" EntityType="Self.User" />
+          <EntitySet Name="User_Issue" EntityType="Self.User_Issue" />
+          <AssociationSet Name="FK_Client_Issue" Association="Self.FK_Client_Issue">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="Issue" EntitySet="Issue" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Client" Association="Self.FK_User_Client">
+            <End Role="User" EntitySet="User" />
+            <End Role="Client" EntitySet="Client" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InvoiceHeader_User" Association="Self.FK_InvoiceHeader_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="InvoiceHeader" EntitySet="InvoiceHeader" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Line_Header" Association="Self.FK_Line_Header">
+            <End Role="InvoiceHeader" EntitySet="InvoiceHeader" />
+            <End Role="InvoiceLine" EntitySet="InvoiceLine" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Issue_User" Association="Self.FK_Issue_User">
+            <End Role="Issue" EntitySet="Issue" />
+            <End Role="User_Issue" EntitySet="User_Issue" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Status_Issue" Association="Self.FK_Status_Issue">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Issue" EntitySet="Issue" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Role" Association="Self.FK_User_Role">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Issue" Association="Self.FK_User_Issue">
+            <End Role="User" EntitySet="User" />
+            <End Role="User_Issue" EntitySet="User_Issue" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InvoiceHeader_Issue" Association="elawyerdbModel.FK_InvoiceHeader_Issue">
+            <End Role="Issue" EntitySet="Issue" />
+            <End Role="InvoiceHeader" EntitySet="InvoiceHeader" />
+          </AssociationSet>
+          <EntitySet Name="InvoiceStatus" EntityType="elawyerdbModel.InvoiceStatus" />
+          <AssociationSet Name="FK_InvoiceHeader_InvoiceStatus" Association="elawyerdbModel.FK_InvoiceHeader_InvoiceStatus">
+            <End Role="InvoiceStatus" EntitySet="InvoiceStatus" />
+            <End Role="InvoiceHeader" EntitySet="InvoiceHeader" />
+          </AssociationSet>
+        </EntityContainer>
+        <Association Name="FK_InvoiceHeader_Issue">
+          <End Type="elawyerdbModel.Issue" Role="Issue" Multiplicity="1" />
+          <End Type="elawyerdbModel.InvoiceHeader" Role="InvoiceHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Issue">
+              <PropertyRef Name="No" />
+            </Principal>
+            <Dependent Role="InvoiceHeader">
+              <PropertyRef Name="NoIssue" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="InvoiceStatus">
+          <Key>
+            <PropertyRef Name="No" />
+          </Key>
+          <Property Name="No" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="30" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="InvoiceHeader" Relationship="elawyerdbModel.FK_InvoiceHeader_InvoiceStatus" FromRole="InvoiceStatus" ToRole="InvoiceHeader" />
+        </EntityType>
+        <Association Name="FK_InvoiceHeader_InvoiceStatus">
+          <End Type="elawyerdbModel.InvoiceStatus" Role="InvoiceStatus" Multiplicity="1" />
+          <End Type="elawyerdbModel.InvoiceHeader" Role="InvoiceHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InvoiceStatus">
+              <PropertyRef Name="No" />
+            </Principal>
+            <Dependent Role="InvoiceHeader">
+              <PropertyRef Name="NoStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="elawyerdbModelStoreContainer" CdmEntityContainer="elawyerdbEntities">
+          <EntitySetMapping Name="Client">
+            <EntityTypeMapping TypeName="elawyerdbModel.Client">
+              <MappingFragment StoreEntitySet="Client">
+                <ScalarProperty Name="No" ColumnName="No" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="NIF" ColumnName="NIF" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="Telephone" ColumnName="Telephone" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="NoUser" ColumnName="NoUser" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="InvoiceHeader">
+            <EntityTypeMapping TypeName="elawyerdbModel.InvoiceHeader">
+              <MappingFragment StoreEntitySet="InvoiceHeader">
+                <ScalarProperty Name="NoStatus" ColumnName="NoStatus" />
+                <ScalarProperty Name="NoIssue" ColumnName="NoIssue" />
+                <ScalarProperty Name="No" ColumnName="No" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="NoUser" ColumnName="NoUser" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="InvoiceLine">
+            <EntityTypeMapping TypeName="elawyerdbModel.InvoiceLine">
+              <MappingFragment StoreEntitySet="InvoiceLine">
+                <ScalarProperty Name="No" ColumnName="No" />
+                <ScalarProperty Name="Concept" ColumnName="Concept" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="NoInvoiceHeader" ColumnName="NoInvoiceHeader" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Issue">
+            <EntityTypeMapping TypeName="elawyerdbModel.Issue">
+              <MappingFragment StoreEntitySet="Issue">
+                <ScalarProperty Name="No" ColumnName="No" />
+                <ScalarProperty Name="NoRef" ColumnName="NoRef" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="Hours" ColumnName="Hours" />
+                <ScalarProperty Name="Fee" ColumnName="Fee" />
+                <ScalarProperty Name="NoClient" ColumnName="NoClient" />
+                <ScalarProperty Name="NoStatus" ColumnName="NoStatus" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Role">
+            <EntityTypeMapping TypeName="elawyerdbModel.Role">
+              <MappingFragment StoreEntitySet="Role">
+                <ScalarProperty Name="No" ColumnName="No" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Status">
+            <EntityTypeMapping TypeName="elawyerdbModel.Status">
+              <MappingFragment StoreEntitySet="Status">
+                <ScalarProperty Name="No" ColumnName="No" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="elawyerdbModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User">
+            <EntityTypeMapping TypeName="elawyerdbModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="No" ColumnName="No" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="NIF" ColumnName="NIF" />
+                <ScalarProperty Name="Telephone" ColumnName="Telephone" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="NoRole" ColumnName="NoRole" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User_Issue">
+            <EntityTypeMapping TypeName="elawyerdbModel.User_Issue">
+              <MappingFragment StoreEntitySet="User_Issue">
+                <ScalarProperty Name="No" ColumnName="No" />
+                <ScalarProperty Name="NoUser" ColumnName="NoUser" />
+                <ScalarProperty Name="NoIssue" ColumnName="NoIssue" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="InvoiceStatus">
+            <EntityTypeMapping TypeName="elawyerdbModel.InvoiceStatus">
+              <MappingFragment StoreEntitySet="InvoiceStatus">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="No" ColumnName="No" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

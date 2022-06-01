@@ -1,0 +1,135 @@
+﻿@using elawyerWebApp.Models;
+@model elawyerWebApp.Models.ViewModels.ClientVM
+@{
+    ViewBag.Title = "Cliente";
+    Layout = "~/Views/Shared/_PrivateLayout.cshtml";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-4 h-100">
+        <div class="card rounded-0 m-4">
+            @{
+                Client currClient = (Client)ViewData["currCliente"];
+                User user = (User)Session["user"];
+            }
+            <div class="card-header align-middle">
+                @if (currClient == null)
+                {
+                    <h4>Nuevo Cliente</h4>
+                }
+                else
+                {
+                    <h4>@currClient.Name @currClient.Surname</h4>
+                }
+            </div>
+            @if (currClient == null)
+            {
+                using (Html.BeginForm("NewClient", "Private", FormMethod.Post))
+                {
+                    <div class="card-body">
+                        <table>
+                            <tr>
+                                <th class="p-2">Nombre:</th>
+                                <td>@Html.TextBoxFor(i => i.Name)</td>
+                            </tr>
+                            <tr>
+                                <th class="p-2">Apellido:</th>
+                                <td>@Html.TextBoxFor(i => i.Surname)</td>
+                            </tr>
+                            <tr>
+                                <th class="p-2">NIF:</th>
+                                <td>@Html.TextBoxFor(i => i.NIF)</td>
+                            </tr>
+                            <tr>
+                                <th class="p-2">Dirección 1:</th>
+                                <td>@Html.TextBoxFor(i => i.Address1)</td>
+                            </tr>
+                            <tr>
+                                <th class="p-2">Dirección 2:</th>
+                                <td>@Html.TextBoxFor(i => i.Address2)</td>
+                            </tr>
+                            <tr>
+                                <th class="p-2">Teléfono:</th>
+                                <td>@Html.TextBoxFor(i => i.Telephone)</td>
+                            </tr>
+                            <tr>
+                                <th class="p-2">Email:</th>
+                                <td>@Html.TextBoxFor(i => i.Email)</td>
+                            </tr>
+                            <tr>
+                                <th class="p-2">ID Abogado:</th>
+                                <td>@Html.EditorFor(i => i.NoUser)</td>
+                            </tr>
+                        </table>
+                    </div>
+                    if (currClient == null && currClient == null)
+                    {
+                        <div class="card-footer text-center">
+                            <button type="submit" id="sendlogin" class="button ps-2 pe-2"><i class="bi bi-save"></i> Crear</button>
+                        </div>
+                    }
+
+                }
+            }
+            else
+            {
+                <div class="card-body">
+                    <table>
+                        <tr>
+                            <th class="p-2">NIF:</th>
+                            <td>@currClient.NIF</td>
+                        </tr>
+                        <tr>
+                            <th class="p-2">Dirección 1:</th>
+                            <td>@currClient.Address1</td>
+                        </tr>
+                        <tr>
+                            <th class="p-2">Dirección 2:</th>
+                            <td>@currClient.Address2</td>
+                        </tr>
+                        <tr>
+                            <th class="p-2">Teléfono:</th>
+                            <td>@currClient.Telephone</td>
+                        </tr>
+                        <tr>
+                            <th class="p-2">Email:</th>
+                            <td>@currClient.Email</td>
+                        </tr>
+                        <tr>
+                            <th class="p-2">ID Abogado:</th>
+                            <td>@currClient.NoUser</td>
+                        </tr>
+                    </table>
+                </div>
+                if (user.NoRole != 2)
+                {
+                    <div class="card-footer text-center">
+                        <button type="button" class="buttonDel" data-bs-toggle="modal" data-bs-target="#DeleteClient">
+                            <i class="bi bi-trash"></i> Eliminar
+                        </button>
+
+                        <div class="modal fade" id="DeleteClient" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Eliminar Cliente</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        ¿Está seguro que desea eliminar este cliente?<br><strong>El proceso no puede ser revertido.</strong>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="buttonClose" data-bs-dismiss="modal">Cerrar</button>
+                                        <a href="@Url.Action("DeleteClient", "Private", new { client = currClient.No })" class="buttonDel text-decoration-none">
+                                            Eliminar
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>

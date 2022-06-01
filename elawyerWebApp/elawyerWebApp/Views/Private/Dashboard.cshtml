@@ -1,0 +1,120 @@
+﻿
+@{
+    ViewBag.Title = "Mi Firma";
+    Layout = "~/Views/Shared/_PrivateLayout.cshtml";
+}
+
+@using elawyerWebApp.Models;
+
+@{
+    User user = (User)Session["user"];
+    <div class="row mt-4 mb-4">
+        <div class="col-md">
+            <div class="row mb-2">
+                @{
+                    if (user.NoRole == 1)
+                    {
+                        <div class="col-sm">
+                            <a href="@Url.Action("ListUser", "Private")" class="text-decoration-none">
+                                <div class="card rounded-0 box1 m-2">
+                                    <h6 class="card-subtitle m-2 text-muted">Usuarios</h6>
+                                    <div class="card-text text-end pe-2">
+                                        @ViewData["usersCount"]
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    }
+                }
+                <div class="col-sm">
+                    <a href="@Url.Action("ListClient", "Private")" class="text-decoration-none">
+                        <div class="card rounded-0 box1 m-2">
+                            <h6 class="card-subtitle m-2 text-muted">Clientes</h6>
+                            <div class="card-text text-end pe-2">
+                                @ViewData["clientsCount"]
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="row">
+                @{
+                    if (user.NoRole != 2)
+                    {
+                        <div class="col-sm">
+                            <div class="row">
+                                <div class="col">
+                                    <a href="@Url.Action("ListInvoice", "Private", new { status = "pay" })" class="text-decoration-none">
+                                        <div class="card rounded-0 box1-invpay m-2">
+                                            <h6 class="card-subtitle m-2 text-muted">Facturas Pagadas</h6>
+                                            <div class="card-text text-end pe-2">
+                                                @ViewData["payInvCount"]
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col">
+                                    <a href="@Url.Action("ListInvoice", "Private", new { status = "notPay" })" class="text-decoration-none">
+                                        <div class="card rounded-0 box1-invpend m-2">
+                                            <h6 class="card-subtitle m-2 text-muted">Facturas Pendientes</h6>
+                                            <div class="card-text text-end pe-2">
+                                                @ViewData["noPayInvCount"]
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    if (user.NoRole != 3)
+                    {
+                        <div class="col-sm">
+                            <a href="@Url.Action("ListIssue", "Private")" class="text-decoration-none">
+                                <div class="card rounded-0 box1 m-2">
+                                    <h6 class="card-subtitle m-2 text-muted">Asuntos</h6>
+                                    <div class="card-text text-end pe-2">
+                                        @ViewData["issueCount"]
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="row col-md-offset-2">
+                <div class="col-sm">
+                    <div class="card rounded-0 box2 m-2">
+                        <h6 class="card-subtitle m-2 text-muted">Importe Total Facturado</h6>
+                        <div class="card-text text-end pe-2">
+                            @ViewData["totAmount"] €
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-2">
+                @if (user.NoRole != 2)
+                {
+                    <div class="col-sm">
+                        <div class="card rounded-0 box2-invpay m-2">
+                            <h6 class="card-subtitle m-2 text-muted">Importe Cobrado</h6>
+                            <div class="card-text text-end pe-2">
+                                @ViewData["totAmountPay"] €
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm">
+                        <div class="card rounded-0 box2-invpend m-2">
+                            <h6 class="card-subtitle m-2 text-muted">Importe Pendiente</h6>
+                            <div class="card-text text-end pe-2">
+                                @ViewData["totAmountNoPay"] €
+                            </div>
+                        </div>
+                    </div>
+                }                
+            </div>
+        </div>
+    </div>
+}
