@@ -1,0 +1,141 @@
+﻿@using elawyerWebApp.Models;
+@model elawyerWebApp.Models.ViewModels.UserVM
+@{
+    ViewBag.Title = "Usuario";
+    Layout = "~/Views/Shared/_PrivateLayout.cshtml";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-lg-4">
+        <div class="card rounded-0">
+            @{
+                User user = (User)ViewData["currUser"];
+                Role role = (Role)ViewData["currRole"];
+            }
+            <div class="card-header rounded-0 main-card-header">
+                <div class="row">
+                    <div class="col">
+                        @if (user == null)
+                        {
+                            <h1>USUARIO</h1>
+                        }
+                        else
+                        {
+                            <h1>USUARIO @user.No</h1>
+                        }
+                    </div>
+                </div>
+            </div>
+            @if (user == null && role == null)
+            {
+                using (Html.BeginForm("NewUser", "Private", FormMethod.Post))
+                {
+                    <div class="card-body">
+                        <table>
+                            <tr>
+                                <th class="p-2">Nombre:</th>
+                                <td>@Html.TextBoxFor(u => u.Name)</td>
+                                @Html.ValidationMessageFor(u => u.Name)
+                            </tr>
+                            <tr>
+                                <th class="p-2">Apellidos:</th>
+                                <td>@Html.TextBoxFor(u => u.Surname)</td>
+                            </tr>
+                            <tr>
+                                <th class="p-2">NIF:</th>
+                                <td>@Html.TextBoxFor(u => u.NIF)</td>
+                            </tr>
+                            <tr>
+                                <th class="p-2">Teléfono:</th>
+                                <td>@Html.TextBoxFor(u => u.Telephone)</td>
+                            </tr>
+                            <tr>
+                                <th class="p-2">Email:</th>
+                                <td>@Html.TextBoxFor(u => u.Email)</td>
+                            </tr>
+                            <tr>
+                                <th class="p-2">Usuario:</th>
+                                <td>@Html.TextBoxFor(u => u.Username)</td>
+                            </tr>
+                            <tr>
+                                <th class="p-2">Contraseña:</th>
+                                <td>@Html.TextBoxFor(u => u.Password)</td>
+                            </tr>
+                            <tr>
+                                <th class="p-2">ID rol:</th>
+                                <td>@Html.EditorFor(u => u.NoRole)</td>
+                            </tr>
+                        </table>
+                    </div>
+                    if (user == null && role == null)
+                    {
+                        <div class="card-footer text-center">
+                            <button type="submit" id="sendlogin" class="button ps-2 pe-2"><i class="bi bi-save"></i> Crear</button>
+                        </div>
+                        if (ViewBag.Error != null && ViewBag.Error != "")
+                        {
+                            <div class="card-footer text-danger text-center">@ViewBag.Error </div>
+                        }
+                    }
+                }
+            }
+            else
+            {
+                <div class="card-body">
+                    <table>
+                        <tr>
+                            <th class="p-2">Nombre y apellidos:</th>
+                            <td>@user.Name @user.Surname</td>
+                        </tr>
+                        <tr>
+                            <th class="p-2">NIF:</th>
+                            <td>@user.NIF</td>
+                        </tr>
+                        <tr>
+                            <th class="p-2">Teléfono:</th>
+                            <td>@user.Telephone</td>
+                        </tr>
+                        <tr>
+                            <th class="p-2">Email:</th>
+                            <td>@user.Email</td>
+                        </tr>
+                        <tr>
+                            <th class="p-2">Usuario:</th>
+                            <td>@user.Username</td>
+                        </tr>
+                        <tr>
+                            <th class="p-2">Perfil:</th>
+                            <td>@role.Description</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="card-footer text-center">
+                    <button type="button" class="buttonDel" data-bs-toggle="modal" data-bs-target="#DeleteUser">
+                        <i class="bi bi-trash"></i> Eliminar
+                    </button>
+
+                    <div class="modal fade" id="DeleteUser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Eliminar Usuario</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    ¿Está seguro que desea eliminar este usuario?<br><strong>El proceso no puede ser revertido.</strong>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="buttonClose" data-bs-dismiss="modal">Cerrar</button>
+                                    <a href="@Url.Action("DeleteUser", "Private", new { user=user.No })" class="buttonDel text-decoration-none">
+                                        Eliminar
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

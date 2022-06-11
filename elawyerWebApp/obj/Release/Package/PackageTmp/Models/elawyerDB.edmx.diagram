@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="76d4e0faa77e4c41888b944b8c46f1ec" Name="Diagram1">
+        <EntityTypeShape EntityType="elawyerdbModel.Client" Width="1.5" PointX="5.25" PointY="3" IsExpanded="true" />
+        <EntityTypeShape EntityType="elawyerdbModel.InvoiceHeader" Width="1.5" PointX="7.625" PointY="2.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="elawyerdbModel.InvoiceLine" Width="1.5" PointX="9.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="elawyerdbModel.Issue" Width="1.5" PointX="10.75" PointY="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="elawyerdbModel.Role" Width="1.5" PointX="0.75" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="elawyerdbModel.Status" Width="1.5" PointX="8.25" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="elawyerdbModel.sysdiagrams" Width="1.5" PointX="0.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="elawyerdbModel.User" Width="1.5" PointX="3" PointY="2.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="elawyerdbModel.User_Issue" Width="1.5" PointX="12.75" PointY="3.75" IsExpanded="true" />
+        <AssociationConnector Association="elawyerdbModel.FK_Client_Issue" ManuallyRouted="false" />
+        <AssociationConnector Association="elawyerdbModel.FK_User_Client" ManuallyRouted="false" />
+        <AssociationConnector Association="elawyerdbModel.FK_InvoiceHeader_User" ManuallyRouted="false" />
+        <AssociationConnector Association="elawyerdbModel.FK_Line_Header" ManuallyRouted="false" />
+        <AssociationConnector Association="elawyerdbModel.FK_Issue_User" ManuallyRouted="false" />
+        <AssociationConnector Association="elawyerdbModel.FK_Status_Issue" ManuallyRouted="false" />
+        <AssociationConnector Association="elawyerdbModel.FK_User_Role" ManuallyRouted="false" />
+        <AssociationConnector Association="elawyerdbModel.FK_User_Issue" ManuallyRouted="false" />
+        <AssociationConnector Association="elawyerdbModel.FK_InvoiceHeader_Issue" />
+        <EntityTypeShape EntityType="elawyerdbModel.InvoiceStatus" Width="1.5" PointX="3.375" PointY="7.875" />
+        <AssociationConnector Association="elawyerdbModel.FK_InvoiceHeader_InvoiceStatus" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

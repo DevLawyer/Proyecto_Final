@@ -1,0 +1,62 @@
+﻿
+@{
+    ViewBag.Title = "Usuarios";
+    Layout = "~/Views/Shared/_PrivateLayout.cshtml";
+}
+@using elawyerWebApp.Models;
+
+@{
+    using (elawyerdbEntities db = new elawyerdbEntities())
+    {
+        List<User> userList = db.User.ToList();
+        <div class="overflow-auto card rounded-0 ms-4 me-4 mt-4">
+            <div class="card-header rounded-0 main-card-header">
+                <div class="row">
+                    <div class="col">
+                        <h1>USUARIOS</h1>
+                    </div>
+                    <div class="col text-end">
+                        <a href="@Url.Action("CardUser", "Private")" class="btn-crud text-decoration-none" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Añadir Usuario">
+                            <h1 class="d-inline"><i class="bi bi-plus-square"></i></h1>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body text-decoration-none">
+                <div class="overflow-auto">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Nº</th>
+                                <th>Nombre</th>
+                                <th>Apellidos</th>
+                                <th>NIF</th>
+                                <th>Teléfono</th>
+                                <th>Email</th>
+                                <th>Usuario</th>
+                                <th>Contraseña</th>
+                                <th>Rol</th>
+                            </tr>
+                        </thead>
+                            @{
+                                foreach (User u in userList)
+                                {
+                                    <tr>
+                                        <td><a href="@Url.Action("CardUser", "Private" , new { user=u.No })" class="text-decoration-none text-dark">@u.No</a></td>
+                                        <td><a href="@Url.Action("CardUser", "Private" , new { user=u.No })" class="text-decoration-none text-dark">@u.Name</a></td>
+                                        <td><a href="@Url.Action("CardUser", "Private" , new { user=u.No })" class="text-decoration-none text-dark">@u.Surname</a></td>
+                                        <td><a href="@Url.Action("CardUser", "Private" , new { user=u.No })" class="text-decoration-none text-dark">@u.NIF</a></td>
+                                        <td><a href="@Url.Action("CardUser", "Private" , new { user=u.No })" class="text-decoration-none text-dark">@u.Telephone</a></td>
+                                        <td><a href="@Url.Action("CardUser", "Private" , new { user=u.No })" class="text-decoration-none text-dark">@u.Email</a></td>
+                                        <td><a href="@Url.Action("CardUser", "Private" , new { user=u.No })" class="text-decoration-none text-dark">@u.Username</a></td>
+                                        <td><a href="@Url.Action("CardUser", "Private" , new { user=u.No })" class="text-decoration-none text-dark">@u.Password</a></td>
+                                        <td><a href="@Url.Action("CardUser", "Private" , new { user=u.No })" class="text-decoration-none text-dark">@u.NoRole</a></td>                                    
+                                    </tr>
+                                }
+                            }
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+}

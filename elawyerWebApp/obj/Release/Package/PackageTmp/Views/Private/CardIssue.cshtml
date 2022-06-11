@@ -1,0 +1,149 @@
+﻿@using elawyerWebApp.Models;
+@model elawyerWebApp.Models.ViewModels.IssueVM
+@{
+    ViewBag.Title = "Asunto";
+    Layout = "~/Views/Shared/_PrivateLayout.cshtml";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-4 h-100">
+        <div class="card rounded-0 m-4">
+            @{
+                Issue currIssue = (Issue)ViewData["currIssue"];
+                Client currClient = (Client)ViewData["currCliente"];
+                List<Status> listStatus = (List<Status>)ViewData["listStatus"];
+                User user = (User)Session["user"];
+            }
+            <div class="card-header align-middle">
+                @if (currClient == null && currIssue == null)
+                {
+                    <h4>Nuevo Asunto</h4>
+                }
+                else
+                {
+                    <h4>Asunto @currIssue.NoRef</h4>
+                }
+            </div>
+            @if (currClient == null && currIssue == null)
+            {
+                using (Html.BeginForm("NewIssue", "Private", FormMethod.Post))
+                {
+                    <div class="card-body">
+                        <table>
+                            <tr>
+                                <th class="p-2">Referencia:</th>
+                                <td>@Html.EditorFor(i => i.NoRef)</td>
+                            </tr>
+                            <tr>
+                                <th class="p-2">
+                                    Fecha de creación:
+                                </th>
+                                <td>@Html.EditorFor(i => i.CreationDate)</td>
+
+                            </tr>
+                            <tr>
+                                <th class="p-2">Fecha de inicio:</th>
+                                <td>@Html.EditorFor(i => i.StartDate)</td>
+                            </tr>
+                            <tr>
+                                <th class="p-2">Fecha de cierre:</th>
+                                <td>@Html.EditorFor(i => i.EndDate)</td>
+                            </tr>
+                            <tr>
+                                <th class="p-2">Horas dedicadas:</th>
+                                <td>@Html.TextBoxFor(i => i.Hours)</td>
+                            </tr>
+                            <tr>
+                                <th class="p-2">Tarifa hora:</th>
+                                <td>@Html.TextBoxFor(i => i.Fee)</td>
+                            </tr>
+                            <tr>
+                                <th class="p-2">Id Cliente:</th>
+                                <td>@Html.TextBoxFor(i => i.NoClient)</td>
+                            </tr>
+                            <tr>
+                                <th class="p-2">Id Estado:</th>
+                                <td>@Html.TextBoxFor(i => i.NoStatus)</td>
+                            </tr>
+                            <tr>
+                                <th class="p-2">Descripción:</th>
+                                <td></td>
+                            </tr>
+                        </table>
+                        @Html.TextAreaFor(i => i.Description, new { @class = "w-100" })
+                    </div>
+                    <div class="card-footer text-center">
+                        <button type="submit" id="sendlogin" class="button ps-2 pe-2"><i class="bi bi-save"></i> Crear</button>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="card-body">
+                    <table>
+                        <tr>
+                            <th class="p-2">Fecha de creación:</th>
+                            <td>@currIssue.CreationDate</td>
+                        </tr>
+                        <tr>
+                            <th class="p-2">Fecha de inicio:</th>
+                            <td>@currIssue.StartDate</td>
+                        </tr>
+                        <tr>
+                            <th class="p-2">Fecha de cierre:</th>
+                            <td>@currIssue.EndDate</td>
+                        </tr>
+                        <tr>
+                            <th class="p-2">Horas dedicadas:</th>
+                            <td>@currIssue.Hours</td>
+                        </tr>
+                        <tr>
+                            <th class="p-2">Tarifa hora:</th>
+                            <td>@currIssue.Fee €</td>
+                        </tr>
+                        <tr>
+                            <th class="p-2">Id Cliente:</th>
+                            <td>@currClient.Name @currClient.Surname</td>
+                        </tr>
+                        <tr>
+                            <th class="p-2">Id Estado:</th>
+                            <td>@listStatus.FirstOrDefault(s => s.No == currIssue.NoStatus).Description</td>
+                        </tr>
+                        <tr>
+                            <th class="p-2">Descripción:</th>
+                            <td>@currIssue.Description</td>
+                        </tr>
+                    </table>
+                </div>
+                if (user.NoRole != 3)
+                {
+                    <div class="card-footer text-center">
+                        <button type="button" class="buttonDel" data-bs-toggle="modal" data-bs-target="#DeleteIssue">
+                            <i class="bi bi-trash"></i> Eliminar
+                        </button>
+
+                        <div class="modal fade" id="DeleteIssue" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Eliminar Asunto</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        ¿Está seguro que desea eliminar este asunto? Esto eliminará el asunto y las facturas asociadas.<br><strong>El proceso no puede ser revertido.</strong>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="buttonClose" data-bs-dismiss="modal">Cerrar</button>
+                                        <a href="@Url.Action("DeleteIssue", "Private", new { issue = currIssue.No })" class="buttonDel text-decoration-none">
+                                            Eliminar
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>        
+    </div>
+</div>
